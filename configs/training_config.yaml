@@ -1,0 +1,169 @@
+# Training Configuration
+# Training pipeline settings following ML best practices
+
+training:
+  # Experiment tracking
+  experiment:
+    name: "flight_cancellation_prediction"
+    run_name: null  # Auto-generated if null
+    tags:
+      - "tabpfnmix"
+      - "rare_event"
+      - "production"
+
+  # Training parameters
+  parameters:
+    seed: 42
+    deterministic: true
+    max_runtime_seconds: 3600  # 1 hour limit
+    early_stopping_rounds: 10
+    save_best_model: true
+
+  # Hardware settings
+  hardware:
+    device: "auto"  # auto, cpu, cuda, mps
+    mixed_precision: false
+    distributed: false
+    num_workers: 4
+
+  # Optimization
+  optimization:
+    hyperparameter_tuning: false
+    search_strategy: "random"  # random, grid, bayesian
+    n_trials: 10
+    timeout: 1800
+
+  # Cross-validation
+  cross_validation:
+    enabled: false
+    n_folds: 5
+    shuffle: true
+    stratified: true
+
+# Monitoring settings
+monitoring:
+  # Metrics to track
+  metrics:
+    - "roc_auc"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "accuracy"
+    - "log_loss"
+
+  # Logging
+  log_interval: 10
+  log_predictions: true
+  log_feature_importance: true
+  log_confusion_matrix: true
+
+  # Visualization
+  create_plots: true
+  plot_formats: ["png", "svg"]
+  plots:
+    - "roc_curve"
+    - "precision_recall_curve"
+    - "confusion_matrix"
+    - "feature_importance"
+    - "calibration_plot"
+
+# Checkpointing
+checkpointing:
+  enabled: true
+  save_frequency: "epoch"  # epoch, steps
+  keep_n_checkpoints: 3
+  checkpoint_dir: "models/checkpoints"
+
+# Model evaluation
+evaluation:
+  # Validation strategy
+  validation_strategy: "hold_out"  # hold_out, cross_validation
+  validation_metric: "roc_auc"
+
+  # Test evaluation
+  test_metrics:
+    - "roc_auc"
+    - "average_precision"
+    - "brier_score"
+    - "calibration_error"
+
+  # Business metrics
+  business_metrics:
+    - name: "cost_benefit"
+      false_positive_cost: 100
+      false_negative_cost: 1000
+
+  # Fairness metrics
+  fairness_metrics:
+    enabled: false
+    sensitive_attributes: []
+    metrics: ["demographic_parity", "equal_opportunity"]
+
+# Production readiness
+production:
+  # Model validation
+  validation_checks:
+    - "performance_threshold"  # Model meets minimum performance
+    - "data_drift"             # Check for data drift
+    - "prediction_drift"       # Check for prediction drift
+    - "latency"               # Inference time check
+
+  # Performance thresholds
+  thresholds:
+    min_roc_auc: 0.90
+    min_precision: 0.85
+    max_inference_time_ms: 100
+
+  # Model comparison
+  compare_with_baseline: true
+  baseline_model: "previous_version"
+  improvement_threshold: 0.01
+
+# Artifacts
+artifacts:
+  # What to save
+  save_model: true
+  save_preprocessor: true
+  save_metrics: true
+  save_predictions: true
+  save_feature_importance: true
+
+  # Paths
+  model_path: "models/artifacts"
+  metrics_path: "models/metrics"
+  predictions_path: "models/predictions"
+
+# Reporting
+reporting:
+  # Generate reports
+  generate_report: true
+  report_format: ["html", "pdf", "markdown"]
+  report_path: "reports"
+
+  # Report contents
+  include_sections:
+    - "executive_summary"
+    - "model_performance"
+    - "feature_importance"
+    - "error_analysis"
+    - "recommendations"
+
+# Integration
+integration:
+  # MLflow tracking
+  mlflow:
+    enabled: false
+    tracking_uri: "http://localhost:5000"
+    experiment_name: "flight_cancellation"
+
+  # Weights & Biases
+  wandb:
+    enabled: false
+    project: "flight-cancellation"
+    entity: null
+
+  # Model registry
+  registry:
+    enabled: true
+    backend: "local"  # local, mlflow, azure, aws
+    path: "models/registry"

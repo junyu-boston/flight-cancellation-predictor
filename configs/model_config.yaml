@@ -1,0 +1,80 @@
+# Model Configuration
+# Following Hugging Face best practices for TabPFNMix
+
+model:
+  name: "TabPFNMix"
+  version: "1.0"
+
+  # TabPFNMix specific parameters
+  tabpfnmix:
+    model_path_regressor: "autogluon/tabpfn-mix-1.0-regressor"
+    model_path_classifier: "autogluon/tabpfn-mix-1.0-classifier"
+    n_ensembles: 1
+    max_epochs: 3
+    subsample_features: false
+    use_py_boost: false
+
+  # Alternative model configurations
+  alternatives:
+    gbm:
+      num_boost_round: 100
+      learning_rate: 0.03
+
+    xgboost:
+      n_estimators: 100
+      max_depth: 6
+
+    neural_network:
+      num_epochs: 10
+      learning_rate: 0.001
+
+# AutoGluon settings
+autogluon:
+  eval_metric: "roc_auc"
+  problem_type: "binary"
+  verbosity: 2
+  use_bag_holdout: true
+  num_bag_folds: 0
+  num_bag_sets: 0
+  num_stack_levels: 0
+
+  # Resource management
+  ag_args_fit:
+    ag.max_memory_usage_ratio: 5
+    num_cpus: null  # Use all available
+    num_gpus: 0
+
+# Model selection criteria
+selection:
+  primary_metric: "roc_auc"
+  secondary_metrics:
+    - "precision"
+    - "recall"
+    - "f1"
+    - "accuracy"
+
+  # Constraints
+  max_inference_time_ms: 100
+  min_precision: 0.9
+
+# Calibration settings
+calibration:
+  use_custom_threshold: true
+  default_threshold: 0.5
+  rare_event_threshold: 0.02
+  calibration_method: "isotonic"
+
+# Feature importance settings
+feature_importance:
+  method: "permutation"
+  num_shuffle_sets: 5
+  subsample_size: null
+  importance_threshold: 0.001
+
+# Model versioning
+versioning:
+  track_experiments: true
+  experiment_name: "flight_cancellation"
+  registry_path: "models/registry"
+  save_best_only: false
+  checkpoint_frequency: 5

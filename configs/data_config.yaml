@@ -1,0 +1,158 @@
+# Data Configuration
+# Data pipeline settings for flight cancellation prediction
+
+data_sources:
+  flight_data:
+    - path: "data/raw/T_ONTIME_REPORTING11_A.parquet"
+      format: "parquet"
+      description: "Flight on-time reporting data - Part A"
+
+    - path: "data/raw/T_ONTIME_REPORTING11_B.parquet"
+      format: "parquet"
+      description: "Flight on-time reporting data - Part B"
+
+  airport_data:
+    path: "data/raw/ARP-NPIAS-2025-2029-AppendixA.xlsx"
+    format: "excel"
+    description: "National Plan of Integrated Airport Systems"
+
+# Data processing settings
+processing:
+  # Column name transformation
+  lowercase_columns: true
+
+  # Data type conversions
+  categorical_columns:
+    - "cancelled"
+    - "op_unique_carrier"
+    - "op_carrier_airline_id"
+    - "op_carrier"
+
+  string_columns:
+    - "origin"
+    - "dest"
+    - "origin_*"  # All columns starting with origin
+    - "dest_*"    # All columns starting with dest
+
+  # Missing value handling
+  missing_value_strategy:
+    numerical: "median"
+    categorical: "mode"
+    threshold: 0.5  # Drop columns with >50% missing
+
+# Feature engineering settings
+features:
+  # Date/time features
+  datetime_features:
+    - "fl_date_dt"
+    - "scheduled_hour_of_departure"
+    - "scheduled_hour_of_arrival"
+
+  # Holiday features
+  holiday_features:
+    enabled: true
+    country: "US"
+    years: [2023, 2024, 2025]
+    proximity_days: 3
+
+  # Indicator features
+  indicator_features:
+    - name: "ind_is_summer"
+      condition: "month >= 6 and month <= 8"
+
+    - name: "ind_late_scheduled_hour_of_departure"
+      condition: "scheduled_hour_of_departure >= 20 and scheduled_hour_of_departure <= 22"
+
+    - name: "ind_early_departure"
+      condition: "dep_delay < 0"
+
+    - name: "ind_dest_TX_long_dist"
+      condition: "dest_state_abr == 'TX' and distance >= 1000"
+
+  # Features to select
+  selected_features:
+    - "year"
+    - "quarter"
+    - "month"
+    - "day_of_month"
+    - "day_of_week"
+    - "scheduled_hour_of_departure"
+    - "scheduled_hour_of_arrival"
+    - "fl_date_dt"
+    - "op_unique_carrier"
+    - "origin"
+    - "dest"
+    - "dep_delay"
+    - "dep_delay_new"
+    - "dep_del15"
+    - "dep_delay_group"
+    - "taxi_in"
+    - "crs_elapsed_time"
+    - "flights"
+    - "distance"
+    - "distance_group"
+    - "carrier_delay"
+    - "weather_delay"
+    - "nas_delay"
+    - "late_aircraft_delay"
+    - "cancelled"  # Target variable
+
+  # Features identified as noise (to be removed in optimized model)
+  noise_features:
+    - "op_unique_carrier"
+    - "dest"
+    - "distance"
+    - "day_of_week"
+    - "scheduled_hour_of_arrival"
+    - "crs_elapsed_time"
+    - "scheduled_hour_of_departure"
+    - "day_of_month"
+    - "ind_early_departure"
+    - "dep_delay_new"
+    - "dep_delay"
+
+# Data split configuration
+split:
+  test_size: 0.4
+  train_size: 0.6
+  validation_size: null  # Use from test if needed
+  random_state: 123
+  stratify: "cancelled"
+
+# Sampling configuration
+sampling:
+  enabled: false  # Set to true for development
+  sample_size: 5000
+  random_state: 123
+  stratify: true
+
+# Data validation
+validation:
+  # Check for data quality issues
+  check_duplicates: true
+  check_missing: true
+  check_data_types: true
+
+  # Statistical checks
+  check_class_balance: true
+  min_samples_per_class: 10
+
+  # Feature validation
+  check_feature_ranges: true
+  check_correlations: true
+  correlation_threshold: 0.95
+
+# Data versioning
+versioning:
+  track_data: true
+  data_version: "v1.0"
+  hash_data: true
+  store_metadata: true
+
+# Output paths
+output:
+  processed_data: "data/processed"
+  feature_data: "data/features"
+  train_data: "data/processed/train.parquet"
+  test_data: "data/processed/test.parquet"
+  validation_data: "data/processed/validation.parquet"

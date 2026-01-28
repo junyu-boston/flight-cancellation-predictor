@@ -1,4 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 .DS_Store
-node_modules
-.tmp
-npm-debug.log
+
+# Data files (keep raw data structure but not files)
+data/raw/*.parquet
+data/raw/*.csv
+data/raw/*.xlsx
+data/processed/
+data/features/
+
+# Model artifacts
+models/artifacts/
+models/checkpoints/
+models/registry/
+
+# Logs
+logs/
+*.log
+training_output.log
+
+# AutoGluon
+AutogluonModels/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+.cache/
+
+# Test coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.pytest_cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Output files
+predictions.csv
+feature_importance_analysis.csv
+feature_importance_plot.png
+
+# OS specific
+Thumbs.db
+.DS_Store
+.Trashes
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Package files
+*.tar.gz
+*.zip
+
+# Secrets
+*.pem
+*.key
+credentials.json

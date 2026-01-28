@@ -1,0 +1,116 @@
+# Logging Configuration
+# Structured logging for ML pipelines
+
+version: 1
+disable_existing_loggers: false
+
+# Log formatters
+formatters:
+  standard:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+  detailed:
+    format: "%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(funcName)s() - %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+  json:
+    class: "pythonjsonlogger.jsonlogger.JsonFormatter"
+    format: "%(asctime)s %(name)s %(levelname)s %(message)s"
+
+# Log handlers
+handlers:
+  console:
+    class: "logging.StreamHandler"
+    level: "INFO"
+    formatter: "standard"
+    stream: "ext://sys.stdout"
+
+  file:
+    class: "logging.handlers.RotatingFileHandler"
+    level: "DEBUG"
+    formatter: "detailed"
+    filename: "logs/app.log"
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+
+  error_file:
+    class: "logging.handlers.RotatingFileHandler"
+    level: "ERROR"
+    formatter: "detailed"
+    filename: "logs/errors.log"
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+
+  json_file:
+    class: "logging.handlers.RotatingFileHandler"
+    level: "INFO"
+    formatter: "json"
+    filename: "logs/app.json"
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+
+# Loggers
+loggers:
+  # Root logger
+  root:
+    level: "INFO"
+    handlers: ["console", "file"]
+
+  # Data pipeline logger
+  data:
+    level: "DEBUG"
+    handlers: ["console", "file"]
+    propagate: false
+
+  # Model training logger
+  training:
+    level: "INFO"
+    handlers: ["console", "file", "json_file"]
+    propagate: false
+
+  # Evaluation logger
+  evaluation:
+    level: "INFO"
+    handlers: ["console", "file"]
+    propagate: false
+
+  # AutoGluon logger
+  autogluon:
+    level: "WARNING"
+    handlers: ["console", "file"]
+    propagate: false
+
+  # Utils logger
+  utils:
+    level: "DEBUG"
+    handlers: ["file"]
+    propagate: false
+
+# Custom logging settings
+custom:
+  # Performance logging
+  log_performance_metrics: true
+  performance_log_interval: 100
+
+  # Data logging
+  log_data_statistics: true
+  log_data_samples: false
+  sample_size: 5
+
+  # Model logging
+  log_model_architecture: true
+  log_hyperparameters: true
+  log_gradients: false
+
+  # Error tracking
+  capture_warnings: true
+  traceback_depth: 10
+
+  # Sensitive data
+  mask_sensitive_data: true
+  sensitive_fields:
+    - "api_key"
+    - "password"
+    - "token"
+    - "secret"

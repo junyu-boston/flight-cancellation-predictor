@@ -1,24 +1,78 @@
-# Build with AI: Executing and Evaluating Hugging Face Models
-This is the repository for the LinkedIn Learning course Build with AI: Executing and Evaluating Hugging Face Models. The full course is available from [LinkedIn Learning][lil-course-url].
+# Flight Cancellation Predictor
 
-![lil-thumbnail-url]
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-## Course Description
+Production-ready ML system for predicting flight cancellations using AutoGluon's TabPFNMix model.
 
-<p>As organizations increasingly adopt AI solutions, leveraging pretrained models from easy-to-use platforms like Hugging Face has become essential for rapid and effective deployment. However, the ease of implementation can mask significant risks when model evaluation is insufficient. In this course, join expert data scientist and instructor Kendall Ruber as she outlines critical skills for strategically selecting, implementing, and rigorously evaluating pretrained models to ensure reliable outcomes for specific organizational use cases.</p>
+## 🚀 Quick Start
 
-## Installing
-1. To use these exercise files, you must have access to:
-	- Google Colab
-2. Visit the notebook: https://colab.research.google.com/drive/1qEqr_iG45mc4R6BY3Dj9cwTC9mW1GcKk#scrollTo=0ax79bW5McJw
+```bash
+# Install
+make setup
 
-## Instructor
+# Run complete pipeline
+make all
 
-Kendall Ruber
-Data Scientist
+# Or use CLI
+flight-predictor train --config configs/model_config.yaml
+flight-predictor predict --input data/new_flights.csv
+```
 
-[0]: # (Replace these placeholder URLs with actual course URLs)
+## 📊 Performance
 
-[lil-course-url]: https://www.linkedin.com/learning/build-with-ai-executing-and-evaluating-hugging-face-models
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D560DAQHBALXCsc1fUA/learning-public-crop_675_1200/B56Zv7ZvwHGYAY-/0/1769449389763?e=2147483647&v=beta&t=PEDX-flsxZYAbfCAXKpjihHvaC-_jI2dhpsNXFZUrt8
+- **ROC-AUC**: 91.87%
+- **Precision**: 100%
+- **Recall**: 81.82%
+- **Training Time**: < 40 seconds
+- **Inference**: 515 rows/s
 
+## 📦 Installation
+
+```bash
+# Using uv (Recommended)
+uv venv
+uv pip install -r requirements.txt
+
+# Using pip
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## 🛠️ Usage
+
+### CLI Commands
+
+```bash
+# Prepare data
+flight-predictor prepare-data
+
+# Train model
+flight-predictor train
+
+# Evaluate
+flight-predictor evaluate --model models/latest
+
+# Predict
+flight-predictor predict --input data/test.csv
+```
+
+### Make Commands
+
+```bash
+make help           # Show all commands
+make train          # Train model
+make evaluate       # Evaluate model
+make predict        # Make predictions
+make test           # Run tests
+```
+
+## 📝 Documentation
+
+See [docs/](docs/) for detailed documentation.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file.

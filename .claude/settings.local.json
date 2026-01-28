@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(file:*)",
+      "Bash(uv --version:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:colab.research.google.com)",
+      "Bash(curl:*)",
+      "Bash(uv venv:*)",
+      "Bash(uv pip install:*)",
+      "Bash(uv run python:*)",
+      "Bash(tee:*)",
+      "Bash(tree:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(gh auth login:*)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}
