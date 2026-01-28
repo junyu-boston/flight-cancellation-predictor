@@ -73,6 +73,14 @@ make test           # Run tests
 
 See [docs/](docs/) for detailed documentation.
 
+## 👥 Maintainer
+
+This fork is maintained by **Jun Yu** ([@junyu-boston](https://github.com/junyu-boston))
+
+## 🤝 Contributors
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for a list of contributors.
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file.
